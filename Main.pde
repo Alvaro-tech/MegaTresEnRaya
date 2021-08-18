@@ -87,7 +87,7 @@ void draw() {
     miniTableros[7].dibujar();
     //DownRight
     miniTableros[8].dibujar();
-    fill(color(255, 0, 0));
+    if(ultimaJugada != -1) fill(color(255, 0, 0)); else fill(color(155, 155, 155));
     rect(0, 0, 132, 40);
     
     fill(255, 255, 255);

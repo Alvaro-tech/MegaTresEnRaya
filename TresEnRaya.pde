@@ -1,9 +1,9 @@
 class TresEnRaya {
    
   ArrayList<Figura> figuras; 
-  int numFig = 0;
+  public int numFig = 0;
   boolean isLinea = false;
-  int colorMarco = 180;
+  color colorMarco = color(180,180,180);
   
   int posX1;
   int posY1;
@@ -16,6 +16,11 @@ class TresEnRaya {
   
   FigInd[] indicesF = new FigInd[9];
   int nTablero;
+  
+  int ultPos;
+  boolean hayLin = false;
+  
+  public boolean isInUso = false;
     
   //PosX = Altura inicial en X de la primera linea horizontal
   //PosY = Altura inicial en Y de la primera linea vertical
@@ -32,8 +37,8 @@ class TresEnRaya {
   
   public void dibujar(){
     strokeWeight(2);
-    if(numFig >= 9) {
-      //colorMarco = 180;
+    if(numFig >= 9 || hayLin) {
+      colorMarco = color(red(colorMarco), green(colorMarco), blue(colorMarco), 150);
       fill(colorMarco);
       rect(posX1, posY3, 398,598);
     } 
@@ -58,7 +63,7 @@ class TresEnRaya {
     Figura aux = new Figura(_posX, _posY, _jugador);
     this.asignarFigura(_posX, _posY, _jugador);
     figuras.add(aux);
-    this.checkLinea(_jugador);
+    if(!hayLin)this.checkLinea();
     return true;
     
   }
@@ -71,60 +76,61 @@ class TresEnRaya {
       return false;
   }
   
-  private void checkLinea(color colorFondo){
+  private void checkLinea(){
+    //colorFondo = color(200, 156, 44,150);
     //Lineas Horizontales
     if(indicesF[0] != null && indicesF[1] != null && indicesF[2] != null
        && indicesF[0].jugador == indicesF[1].jugador && indicesF[2].jugador == indicesF[1].jugador ){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[0].jugador;
+      hayLin = true;
       return;
     }
     if(indicesF[3]!= null && indicesF[4] != null && indicesF[5] != null
     && indicesF[3].jugador == indicesF[4].jugador && indicesF[4].jugador == indicesF[5].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[3].jugador;
+      hayLin = true;
       return;
     }
     if(indicesF[6] != null && indicesF[7] != null && indicesF[8] != null
     && indicesF[6].jugador == indicesF[7].jugador && indicesF[7].jugador == indicesF[8].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[6].jugador;
+      hayLin = true;
       return;
     }
     
     //Lineas Verticales
     if(indicesF[0] != null && indicesF[3] != null && indicesF[6] != null
     && indicesF[0].jugador == indicesF[3].jugador && indicesF[3].jugador == indicesF[6].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[0].jugador;
+      hayLin = true;
       return;
     }
     
     if(indicesF[1] != null && indicesF[4] != null && indicesF[7] != null
     && indicesF[1].jugador == indicesF[4].jugador && indicesF[4].jugador == indicesF[7].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[1].jugador;
+      hayLin = true;
       return;
     }
     
     if(indicesF[2] != null && indicesF[5] != null && indicesF[8] != null
     && indicesF[2].jugador == indicesF[5].jugador && indicesF[5].jugador == indicesF[8].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[2].jugador;
+      hayLin = true;
       return;
     } 
     
     //Lineas diagonales
     if(indicesF[0] != null && indicesF[4] != null && indicesF[8] != null
     && indicesF[0].jugador == indicesF[4].jugador && indicesF[4].jugador == indicesF[8].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[0].jugador;
+      hayLin = true;
       return;
     }
     if(indicesF[2] != null && indicesF[4] != null && indicesF[6] != null
     && indicesF[2].jugador == indicesF[4].jugador && indicesF[4].jugador == indicesF[6].jugador){
-      colorMarco = colorFondo;
-      numFig = 9;
+      colorMarco = indicesF[2].jugador;
+      hayLin = true;
       return;
     }
     
@@ -137,27 +143,75 @@ class TresEnRaya {
         //1
         if(_posX > posX1 && _posX < posX1 + 133){
           indicesF[0] = new FigInd(fondo);
+          ultPos = 0;
           println("# -> Tablero: " + nTablero + " Casilla: " + "1" );
         }
         //2
         if(_posX > posX1 + 133 && _posX < posX1 + (2*133)){
           indicesF[1] = new FigInd(fondo);
+          ultPos = 1;
           println("# -> Tablero: " + nTablero + " Casilla: " + "2" );
         }
         //3
         if(_posX > posX1 + (2*133) && _posX < posX1 + (3*133)){
           indicesF[2] = new FigInd(fondo);
+          ultPos = 2;
           println("# -> Tablero: " + nTablero + " Casilla: " + "3" );
         }
     }
+    inicioTop += 200;
     //Segunda fila
-    
+    if(_posY > inicioTop && _posY < posY1 + 200){
+        //4
+        if(_posX > posX1 && _posX < posX1 + 133){
+          indicesF[3] = new FigInd(fondo);
+          ultPos = 3;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "4" );
+        }
+        //5
+        if(_posX > posX1 + 133 && _posX < posX1 + (2*133)){
+          indicesF[4] = new FigInd(fondo);
+          ultPos = 4;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "5" );
+        }
+        //6
+        if(_posX > posX1 + (2*133) && _posX < posX1 + (3*133)){
+          indicesF[5] = new FigInd(fondo);
+          ultPos = 5;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "6" );
+        }
+    }
+    inicioTop += 200;
     //Tercera Fila
-    
+    if(_posY > inicioTop && _posY < posY1 + 400){
+        //7
+        if(_posX > posX1 && _posX < posX1 + 133){
+          indicesF[6] = new FigInd(fondo);
+          ultPos = 6;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "7" );
+        }
+        //8
+        if(_posX > posX1 + 133 && _posX < posX1 + (2*133)){
+          indicesF[7] = new FigInd(fondo);
+          ultPos = 7;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "8" );
+        }
+        //9
+        if(_posX > posX1 + (2*133) && _posX < posX1 + (3*133)){
+          indicesF[8] = new FigInd(fondo);
+          ultPos = 8;
+          println("# -> Tablero: " + nTablero + " Casilla: " + "9" );
+        }
+    }
   }
   
   public void removeFigura(){
     figuras.remove(figuras.size() - 1);
     numFig--;
+    hayLin = false;
+    colorMarco = color(180,180,180);
+    indicesF[ultPos] = null;
+    this.checkLinea();
+    
   }
 }
